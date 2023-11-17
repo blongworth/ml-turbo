@@ -12,14 +12,19 @@
 #define turbo_h
 
 #include <Arduino.h>
+#include "USBHost_t36.h"
+
+#define USBBAUD 9600
 
 class Turbo
 {
 private:
+  USBHost myusb;
 
 public:
     Turbo();
     void begin();
+    void status();
     void start();
     void stop();
     void setSpeed(int TB_Spd4);

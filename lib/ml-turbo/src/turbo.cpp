@@ -19,12 +19,26 @@
 
 #include <Arduino.h>
 #include "turbo.h"
+#include "USBHost_t36.h"
 
 Turbo::Turbo()
 {
+  uint32_t baud = USBBAUD;
+  uint32_t format = USBHOST_SERIAL_8N1;
+  USBHub hub1(myusb);
+  USBHub hub2(myusb);
+  USBHIDParser hid1(myusb);
+  USBHIDParser hid2(myusb);
+  USBHIDParser hid3(myusb);
+  USBSerial userial(myusb);
+  USBDriver *drivers[] = {&hub1, &hub2, &hid1, &hid2, &hid3, &userial};
+  #define CNT_DEVICES (sizeof(drivers)/sizeof(drivers[0]))
+  const char * driver_names[CNT_DEVICES] = {"Hub1", "Hub2",  "HID1", "HID2", "HID3", "USERIAL1" };
+  bool driver_active[CNT_DEVICES] = {false, false, false, false};
 }
 
 void Turbo::begin() {
+  myusb.begin();
 }
 
 void Turbo::start() {
@@ -33,7 +47,7 @@ void Turbo::start() {
   const int BUFFER_SIZE_T = 30;
   char VarT[BUFFER_SIZE_T];
   char VarTOut[6];
-  digitalWrite(13, HIGH);
+  size_t rlen;
   rlen = userial.readBytesUntil(13, VarT, BUFFER_SIZE_T);
   for (int i = 10; i < 16; ++i) {
     VarTOut[i - 10] = VarT[i];
@@ -188,6 +202,7 @@ void Turbo::getStatusTurboB(int ST[]) {
 
 int Turbo::check(int TB_Spd1) {
   int m;
+  int Status_Turbo_B[3];
   m=TB_Spd1-50;
   getStatusTurboB(Status_Turbo_B);
   
