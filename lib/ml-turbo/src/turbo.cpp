@@ -21,8 +21,7 @@
 #include "turbo.h"
 #include "USBHost_t36.h"
 
-Turbo::Turbo()
-{
+  USBHost myusb;
   uint32_t baud = USBBAUD;
   uint32_t format = USBHOST_SERIAL_8N1;
   USBHub hub1(myusb);
@@ -35,10 +34,16 @@ Turbo::Turbo()
   #define CNT_DEVICES (sizeof(drivers)/sizeof(drivers[0]))
   const char * driver_names[CNT_DEVICES] = {"Hub1", "Hub2",  "HID1", "HID2", "HID3", "USERIAL1" };
   bool driver_active[CNT_DEVICES] = {false, false, false, false};
+
+Turbo::Turbo()
+{
 }
 
 void Turbo::begin() {
   myusb.begin();
+}
+
+void Turbo::status() {
 }
 
 void Turbo::start() {

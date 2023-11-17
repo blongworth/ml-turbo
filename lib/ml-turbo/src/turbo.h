@@ -19,7 +19,6 @@
 class Turbo
 {
 private:
-  USBHost myusb;
 
 public:
     Turbo();
